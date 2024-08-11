@@ -21,33 +21,22 @@ env:
   TZ: Asia/Shanghai
 
 jobs:
-  build-firmware:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: 检查项目分支
         uses: actions/checkout@main
 
-      - name: 生成Release变更内容
-        id: github_release
-        uses: mikepenz/release-changelog-builder-action@v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: 生成release标签
         id: tag
-        if: env.UPLOAD_RELEASE == 'true'
         run: |
-          release_tag=redmi-ax6000-v$(date +"%Y%m%d%H%M")
+          release_tag = redmi-ax6000-v$(date +"%Y%m%d%H%M")
           echo "release_tag=$release_tag" >> $GITHUB_OUTPUT
           echo "🎉🎉 红米AX6000: $release_tag 发布成功" > release.txt
-          cat release.txt
           echo " ${{steps.github_release.outputs.changelog}} " >> release.txt
-          cat release.txt
-          echo "status=success" >> $GITHUB_OUTPUT
 
       - name: 上传firmware到Release
         uses: softprops/action-gh-release@master
-        if: steps.tag.outputs.status == 'success' && !cancelled()
         with:
           tag_name: ${{ steps.tag.outputs.release_tag }}
           name: ${{ steps.tag.outputs.release_tag }}

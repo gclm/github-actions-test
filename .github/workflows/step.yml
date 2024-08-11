@@ -24,7 +24,7 @@ jobs:
       - name: 生成release标签
         id: tag
         run: |
-          previous_tag=$(git --no-pager tag --sort=-creatordate | head -n 1)
+          previous_tag=$(git --no-pager tag --sort=creatordate | tail -2 | head -1)
           echo "previous_tag: $previous_tag"
           echo "previous_tag=$previous_tag" >> $GITHUB_ENV
           

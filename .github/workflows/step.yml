@@ -28,7 +28,7 @@ jobs:
       - name: 生成release标签
         id: tag
         run: |
-          release_tag="redmi-ax6000-v$(date +"%Y%m%d%H%M")"
+          release_tag=redmi-ax6000-v$(date +"%Y%m%d%H%M")
           release_title="🎉🎉 红米AX6000: $release_tag 发布成功"
           git tag -a $release_tag -m $release_title
           echo "当前生成release标签：$release_tag"

@@ -30,14 +30,13 @@ jobs:
       - name: 生成release标签
         id: tag
         run: |
-          release_tag = redmi-ax6000-v$(date +"%Y%m%d%H%M")
+          release_tag=redmi-ax6000-v$(date +"%Y%m%d%H%M")
           echo "release_tag=$release_tag" >> $GITHUB_OUTPUT
           echo "🎉🎉 红米AX6000: $release_tag 发布成功" > release.txt
-          echo " ${{steps.github_release.outputs.changelog}} " >> release.txt
 
       - name: 上传firmware到Release
         uses: softprops/action-gh-release@master
-        if: env.UPLOAD_FIRMWARE == 'true'
+        if: env.UPLOAD_RELEASE == 'true'
         with:
           tag_name: ${{ steps.tag.outputs.release_tag }}
           name: ${{ steps.tag.outputs.release_tag }}

@@ -46,7 +46,7 @@ jobs:
 
 
   delete-workflow:
-    needs: [ build-firmware ]
+    needs: [ build ]
     runs-on: ubuntu-latest
     steps:
       - name: 删除workflow运行

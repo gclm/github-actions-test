@@ -29,7 +29,7 @@ jobs:
           echo "previous_tag=$previous_tag" >> $GITHUB_ENV
           
           release_tag=redmi-ax6000-${{ github.ref_name }}
-          release_title="🎉🎉 红米AX6000: $release_tag 发布成功"
+          release_title="🎉🎉 红米AX6000 ${{ github.ref_name }} 版本发布成功"
           
           echo "生成 $previous_tag 到 ${{ github.ref_name }} 的版本日志"
           echo "release_tag=$release_tag" >> $GITHUB_ENV

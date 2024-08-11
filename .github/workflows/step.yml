@@ -17,12 +17,29 @@ jobs:
       - name: 检查项目分支
         uses: actions/checkout@main
 
+      - name: Get previous tag
+        id: previousTag
+        run: |
+          name=$(git --no-pager tag --sort=creatordate --merged ${{ github.ref_name }} | tail -2 | head -1)
+          echo "previousTag: $name"
+          echo "previousTag=$name" >> $GITHUB_ENV
+
+      - name: Update CHANGELOG
+        id: changelog
+        uses: requarks/changelog-action@v1
+        with:
+          token: ${{ github.token }}
+          fromTag: ${{ github.ref_name }}
+          toTag: ${{ env.previousTag }}
+          writeToFile: false
+
       - name: 生成release标签
         id: tag
         run: |
           release_tag=redmi-ax6000-v$(date +"%Y%m%d%H%M")
           echo "release_tag=$release_tag" >> $GITHUB_OUTPUT
           echo "🎉🎉 红米AX6000: $release_tag 发布成功" > release.txt
+          echo "${{ steps.changelog.outputs.changes }}" >> release.txt
 
       - name: 上传firmware到Release
         uses: softprops/action-gh-release@master

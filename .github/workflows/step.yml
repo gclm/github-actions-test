@@ -1,11 +1,10 @@
 name: Actions Step1
 
 on:
-  on:
-    push:
-      branches:
-        - main
-        - 'releases/**'
+  push:
+    branches:
+      - main
+      - 'releases/**'
   repository_dispatch:
   workflow_dispatch:
 

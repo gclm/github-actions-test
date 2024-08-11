@@ -37,7 +37,7 @@ jobs:
 
       - name: 上传firmware到Release
         uses: softprops/action-gh-release@master
-        if: (!cancelled())
+        if: env.UPLOAD_FIRMWARE == 'true'
         with:
           tag_name: ${{ steps.tag.outputs.release_tag }}
           name: ${{ steps.tag.outputs.release_tag }}

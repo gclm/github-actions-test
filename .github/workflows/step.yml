@@ -25,35 +25,34 @@ jobs:
         run: |
           git config --global user.email "you@example.com"
           git config --global user.name "Github Action"
-        
-          echo "tag: $(git --no-pager tag --sort=-creatordate)"  
+          
           previous_tag=$(git --no-pager tag --sort=-creatordate | head -n 1)
-          echo "previousTag: $previous_tag"
-        
-          echo "previousTag=$previous_tag" >> $GITHUB_ENV
+          echo "previous_tag: $previous_tag"
+          echo "previous_tag=$previous_tag" >> $GITHUB_ENV
           
           release_tag=redmi-ax6000-v$(date +"%Y%m%d%H%M")
           release_title="🎉🎉 红米AX6000: $release_tag 发布成功"
           git tag -a $release_tag -m  "$release_title"
-         
+          
           echo "生成 $previous_tag 到 $release_tag 的版本日志"
-          echo "release_tag=$release_tag" >> $GITHUB_OUTPUT
-          echo "release_title=$release_title" >> $GITHUB_OUTPUT
+          echo "release_tag=$release_tag" >> $GITHUB_ENV
+          echo "release_title=$release_title" >> $GITHUB_ENV
 
       - name: Update CHANGELOG
         id: changelog
         uses: requarks/changelog-action@v1
         with:
           token: ${{ github.token }}
-          tag: ${{ steps.tag.outputs.release_tag }}
+          fromTag: ${{ env.release_tag }}
+          toTag: ${{ env.previous_tag }}
           writeToFile: false
 
       - name: 上传firmware到Release
         uses: softprops/action-gh-release@master
         if: env.UPLOAD_RELEASE == 'true'
         with:
-          tag_name: ${{ steps.tag.outputs.release_tag }}
-          name: ${{ steps.tag.outputs.release_title }}
+          tag_name: ${{ env.release_tag }}
+          name: ${{ env.release_title }}
           body: ${{ steps.changelog.outputs.changes }}
           files: |
             ${{ env.FIRMWARE }}/*

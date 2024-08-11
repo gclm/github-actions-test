@@ -23,9 +23,11 @@ jobs:
         run: |
           git config --global user.email "you@example.com"
           git config --global user.name "Github Action"
-          
+        
+          echo "tag: $(git --no-pager tag --sort=-creatordate)"  
           previous_tag=$(git --no-pager tag --sort=-creatordate | head -n 1)
           echo "previousTag: $previous_tag"
+        
           echo "previousTag=$previous_tag" >> $GITHUB_ENV
           
           release_tag=redmi-ax6000-v$(date +"%Y%m%d%H%M")
